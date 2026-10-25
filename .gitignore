@@ -1,13 +1,10 @@
-__pycache__/
-*.py[cod]
-.pytest_cache/
-*.egg-info/
-dist/
-build/
+.env
+.env.*
+!.env.example
 .venv/
-venv/
-
-# Files the agent creates during runs — do not commit these
-word_freq.py
-result.txt
-*.output.txt
+__pycache__/
+.pytest_cache/
+.cache/
+workspace/
+.chroma/
+*.log

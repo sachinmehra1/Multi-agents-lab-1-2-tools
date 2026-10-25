@@ -75,5 +75,19 @@ def exec_python(path: str, timeout: int = 10) -> str:
     Timeout : "Error: script 'loop.py' exceeded timeout of 2s and was killed."
     Crash   : "Error (exit code 1):\\nTraceback (most recent call last):\\n  ..."
     """
-    # TODO: implement exec_python
-    raise NotImplementedError("Implement exec_python in tools/code_executor.py")
+    try:
+        effective_timeout = min(timeout, MAX_TIMEOUT)
+        if effective_timeout <= 0:
+            return "Error: timeout must be positive."
+        result = subprocess.run([sys.executable, path], capture_output=True,
+                                text=True, timeout=effective_timeout)
+        output = result.stdout if result.returncode == 0 else (
+            f"Error (exit code {result.returncode}):\n{result.stderr}{result.stdout}"
+        )
+        if len(output) > MAX_OUTPUT_CHARS:
+            output = output[:MAX_OUTPUT_CHARS] + "\n[output truncated]"
+        return output
+    except subprocess.TimeoutExpired as exc:
+        return f"Error: script {path!r} exceeded timeout of {exc.timeout}s and was killed."
+    except Exception as exc:
+        return f"Error executing script {path!r}: {exc}"

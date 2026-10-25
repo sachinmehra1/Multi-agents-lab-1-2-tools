@@ -50,8 +50,11 @@ def read_file(path: str) -> str:
     Success : "def word_count(text):\n    ..."
     Failure : "Error reading file '/src/utils.py': No such file or directory."
     """
-    # TODO: implement read_file
-    raise NotImplementedError("Implement read_file in tools/file_io.py")
+    try:
+        with open(os.path.abspath(path), encoding="utf-8") as handle:
+            return handle.read()
+    except Exception as exc:
+        return f"Error reading file {path!r}: {exc}"
 
 
 def write_file(path: str, content: str) -> str:
@@ -90,5 +93,11 @@ def write_file(path: str, content: str) -> str:
     Success : "File written successfully. 12 lines."
     Failure : "Error writing file '/read-only/file.py': Permission denied."
     """
-    # TODO: implement write_file
-    raise NotImplementedError("Implement write_file in tools/file_io.py")
+    try:
+        target = os.path.abspath(path)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        with open(target, "w", encoding="utf-8") as handle:
+            handle.write(content)
+        return f"File written successfully. {len(content.splitlines())} lines."
+    except Exception as exc:
+        return f"Error writing file {path!r}: {exc}"

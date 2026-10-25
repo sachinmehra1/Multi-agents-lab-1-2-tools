@@ -123,3 +123,23 @@ The tests define the contract — reading and understanding them is part of the 
 
 Once `agent.py` runs successfully, your tools are ready for **Lab 1.3**, where you
 assemble them into a full ReACT loop. The same `tools/` package is imported unchanged.
+
+
+## Completed implementation and verification
+
+See [verification/results.md](verification/results.md) for observed results.
+Use Python 3.12 and `pip install -r requirements-tested.txt` for the tested versions.
+Run `python -m pytest -q` for offline tests.
+
+For the course route, configure your own credentials using `.env.example`.
+For a direct OpenAI run, keep your private key in a separate `.env` containing
+`LLM_API_KEY` or `OPENAI_API_KEY`, then run:
+
+```sh
+python run_openai.py --env /absolute/path/to/private.env agent.py
+```
+
+The launcher reads the key into process memory; it does not write a credential file.
+The upstream starter contained hardcoded credentials. They were removed from
+the current branch and setup script; upstream Git history still requires rotation
+of those credentials by their owner. Never reuse those historical values.
